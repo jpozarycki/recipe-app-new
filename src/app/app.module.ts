@@ -8,6 +8,8 @@ import {AppComponent} from './app.component';
 import {HeaderComponent} from './header/header.component';
 import {AlertComponent} from './shared/alert/alert.component';
 import {CoreModule} from './core.module';
+import {StoreModule} from '@ngrx/store';
+import {shoppingListReducer} from './shopping-list/store/shopping-list.reducer';
 
 
 @NgModule({
@@ -19,13 +21,15 @@ import {CoreModule} from './core.module';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    StoreModule.forRoot({shoppingList: shoppingListReducer}),
     SharedModule,
     CoreModule
   ],
   bootstrap: [AppComponent],
   entryComponents: [
     AlertComponent
-  ]
+  ],
+  // providers: [LoggingService]
 })
 export class AppModule {
 }
