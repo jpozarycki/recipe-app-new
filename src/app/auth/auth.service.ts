@@ -1,10 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {catchError, tap} from 'rxjs/operators';
 import {throwError} from 'rxjs';
 import {User} from './user.model';
 import {Router} from '@angular/router';
-import {environment} from '../../environments/environment';
 import {Store} from '@ngrx/store';
 import * as fromApp from '../store/app.reducer';
 import * as AuthActions from './store/auth.actions';
@@ -27,39 +25,6 @@ export class AuthService {
   private tokenExpirationTimer: any;
 
   constructor(private http: HttpClient, private router: Router, private store: Store<fromApp.AppState>) {
-  }
-
-  signUp(email: string, password: string) {
-    // tslint:disable-next-line:max-line-length
-    return this.http.post<AuthResponseData>('https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=' + environment.firebaseAPIKey,
-      {
-        email,
-        password,
-        returnSecureToken: true
-      }).pipe(catchError(this.handleError), tap(resData => {
-      this.handleAuthentication(
-        resData.email,
-        resData.localId,
-        resData.idToken,
-        +resData.expiresIn);
-    }));
-  }
-
-  logIn(email: string, password: string) {
-    // tslint:disable-next-line:max-line-length
-    return this.http.post<AuthResponseData>('https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=' + environment.firebaseAPIKey,
-      {
-        email,
-        password,
-        returnSecureToken: true
-      }).pipe(catchError(this.handleError),
-      tap(resData => {
-        this.handleAuthentication(
-          resData.email,
-          resData.localId,
-          resData.idToken,
-          +resData.expiresIn);
-      }));
   }
 
   autoLogin() {
